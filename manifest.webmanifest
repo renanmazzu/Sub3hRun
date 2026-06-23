@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#12070b">
+  <title>SUB3h RUN</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08090b;
+      --card: #14151a;
+      --line: #2a2c34;
+      --text: #f5f6f8;
+      --muted: #a9acb5;
+      --red: #ff304f;
+      --wine: #7b1430;
+      --green: #35d58a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #16080d 0, var(--bg) 320px);
+      color: var(--text);
+    }
+    .app {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 32px;
+    }
+    header {
+      display: flex;
+      justify-content: flex-end;
+      text-align: right;
+      margin-bottom: 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 11vw, 4.8rem);
+      line-height: .9;
+      color: transparent;
+      background: linear-gradient(120deg, var(--red), #c81743 45%, var(--wine));
+      -webkit-background-clip: text;
+      background-clip: text;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      font-weight: 900;
+      color: #e7e8ec;
+      font-size: 1rem;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .box, section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(20, 21, 26, .96);
+    }
+    .box {
+      padding: 12px;
+    }
+    .box span, label, .small {
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .box strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 1.35rem;
+    }
+    nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    nav button, .primary, .secondary, .danger {
+      min-height: 44px;
+      border-radius: 8px;
+      font-weight: 900;
+      color: var(--text);
+    }
+    nav button {
+      border: 1px solid var(--line);
+      background: #101116;
+    }
+    nav button.active, .primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--red), var(--wine));
+    }
+    section {
+      display: none;
+      padding: 14px;
+    }
+    section.active { display: block; }
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+    }
+    form {
+      display: grid;
+      gap: 12px;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid #343640;
+      border-radius: 8px;
+      background: #0d0e12;
+      color: var(--text);
+      padding: 12px;
+      font: inherit;
+    }
+    textarea { min-height: 105px; resize: vertical; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .primary, .secondary, .danger {
+      border: 0;
+      padding: 0 14px;
+    }
+    .secondary {
+      border: 1px solid var(--line);
+      background: transparent;
+    }
+    .danger {
+      border: 1px solid rgba(255, 48, 79, .5);
+      background: transparent;
+      color: #ff8ea0;
+    }
+    .workout {
+      display: grid;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #191a20;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .workout-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .tags span {
+      border: 1px solid #343640;
+      border-radius: 999px;
+      padding: 5px 8px;
+    }
+    canvas {
+      width: 100%;
+      height: 300px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0d0e12;
+    }
+    .status {
+      margin-top: 10px;
+      color: var(--green);
+      font-weight: 800;
+      font-size: .88rem;
+    }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .box { padding: 10px 8px; }
+      .box span { font-size: .66rem; }
+      .box strong { font-size: 1.1rem; }
+      nav button { font-size: .78rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>SUB3h RUN</h1>
+        <p class="subtitle">OBJETIVO 2h59m59s</p>
+      </div>
+    </header>
+
+    <div class="summary">
+      <div class="box"><span>Treinos semana</span><strong id="weekCount">0</strong></div>
+      <div class="box"><span>Km semana</span><strong id="weekKm">0,0</strong></div>
+      <div class="box"><span>Tempo</span><strong id="weekTime">0h00</strong></div>
+    </div>
+
+    <nav>
+      <button class="active" data-tab="registro">Registro</button>
+      <button data-tab="historico">Histórico</button>
+      <button data-tab="analises">Análises</button>
+      <button data-tab="github">GitHub</button>
+    </nav>
+
+    <section id="registro" class="active">
+      <h2>Registrar treino</h2>
+      <form id="form">
+        <label>Data <input type="date" id="date" required></label>
+        <label>Tipo de corrida
+          <select id="type">
+            <option>Ez Run</option>
+            <option>Tempo Run</option>
+            <option>Steady Run</option>
+            <option>Intervalado</option>
+            <option>Fartlek</option>
+            <option>Longão</option>
+            <option>Regenerativo</option>
+          </select>
+        </label>
+        <div class="grid">
+          <label>Distância do treino (km) <input id="distance" inputmode="decimal" placeholder="8,0" required></label>
+          <label>Pace do treino (min/km) <input id="pace" inputmode="decimal" placeholder="4:50" required></label>
+        </div>
+        <div class="grid">
+          <label>Distância total (km) <input id="totalDistance" inputmode="decimal" placeholder="10,0" required></label>
+          <label>Pace médio total (min/km) <input id="avgPace" inputmode="decimal" placeholder="5:05" required></label>
+        </div>
+        <label>FC média (bpm) <input id="hr" type="number" min="40" max="230" placeholder="148" required></label>
+        <label>Sensação e observações <textarea id="notes" placeholder="Como foi o treino?"></textarea></label>
+        <button class="primary" type="submit">Salvar treino</button>
+      </form>
+      <div id="saveStatus" class="status"></div>
+    </section>
+
+    <section id="historico">
+      <h2>Histórico de treinos</h2>
+      <div id="history"></div>
+    </section>
+
+    <section id="analises">
+      <h2>Análises da semana</h2>
+      <div class="summary">
+        <div class="box"><span>Distância total</span><strong id="analysisKm">0,0 km</strong></div>
+        <div class="box"><span>Pace médio</span><strong id="analysisPace">--:--</strong></div>
+        <div class="box"><span>FC média</span><strong id="analysisHr">--</strong></div>
+      </div>
+      <canvas id="chart" width="700" height="300"></canvas>
+    </section>
+
+    <section id="github">
+      <h2>Sincronização GitHub</h2>
+      <form id="githubForm">
+        <label>Usuário GitHub <input id="ghOwner" placeholder="seu-usuario"></label>
+        <label>Repositório <input id="ghRepo" placeholder="sub3h-run-data"></label>
+        <label>Branch <input id="ghBranch" value="main"></label>
+        <label>Arquivo JSON <input id="ghPath" value="data/workouts.json"></label>
+        <label>Token GitHub <input id="ghToken" type="password" placeholder="token com leitura e escrita"></label>
+        <button class="primary" type="submit">Salvar GitHub</button>
+      </form>
+      <button class="secondary" id="syncNow" style="margin-top:10px">Sincronizar agora</button>
+      <div id="syncStatus" class="status">Salvamento local ativo.</div>
+    </section>
+  </div>
+
+  <script>
+    const KEY = "sub3h-run-workouts";
+    const GH_KEY = "sub3h-run-github";
+    let workouts = JSON.parse(localStorage.getItem(KEY) || "[]");
+    let github = JSON.parse(localStorage.getItem(GH_KEY) || "{}");
+
+    const $ = (id) => document.getElementById(id);
+    $("date").valueAsDate = new Date();
+    ["ghOwner", "ghRepo", "ghBranch", "ghPath", "ghToken"].forEach(id => { if (github[id]) $(id).value = github[id]; });
+
+    document.querySelectorAll("nav button").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+        btn.classList.add("active");
+        $(btn.dataset.tab).classList.add("active");
+        render();
+      };
+    });
+
+    $("form").onsubmit = async (event) => {
+      event.preventDefault();
+      const totalKm = km($("totalDistance").value);
+      const avgPaceSec = paceToSeconds($("avgPace").value);
+      workouts.unshift({
+        id: crypto.randomUUID(),
+        date: $("date").value,
+        type: $("type").value,
+        distance: km($("distance").value),
+        pace: paceText($("pace").value),
+        totalDistance: totalKm,
+        avgPace: paceText($("avgPace").value),
+        hr: Number($("hr").value),
+        notes: $("notes").value.trim(),
+        seconds: Math.round(totalKm * avgPaceSec),
+        createdAt: new Date().toISOString()
+      });
+      saveLocal();
+      event.target.reset();
+      $("date").valueAsDate = new Date();
+      $("saveStatus").textContent = "Treino salvo.";
+      await syncGithub();
+      render();
+    };
+
+    $("githubForm").onsubmit = async (event) => {
+      event.preventDefault();
+      github = {
+        ghOwner: $("ghOwner").value.trim(),
+        ghRepo: $("ghRepo").value.trim(),
+        ghBranch: $("ghBranch").value.trim() || "main",
+        ghPath: $("ghPath").value.trim() || "data/workouts.json",
+        ghToken: $("ghToken").value.trim()
+      };
+      localStorage.setItem(GH_KEY, JSON.stringify(github));
+      $("syncStatus").textContent = "Configuração salva.";
+      await syncGithub();
+    };
+
+    $("syncNow").onclick = syncGithub;
+
+    function saveLocal() {
+      localStorage.setItem(KEY, JSON.stringify(workouts));
+    }
+
+    function km(value) {
+      return Number(String(value).replace(",", ".")) || 0;
+    }
+
+    function paceToSeconds(value) {
+      const txt = String(value).trim().replace(",", ":");
+      if (txt.includes(":")) {
+        const [m, s = 0] = txt.split(":").map(Number);
+        return (m * 60) + s;
+      }
+      return Number(txt) * 60 || 0;
+    }
+
+    function paceText(value) {
+      const seconds = paceToSeconds(value);
+      return secondsToPace(seconds);
+    }
+
+    function secondsToPace(seconds) {
+      if (!seconds) return "--:--";
+      const m = Math.floor(seconds / 60);
+      const s = Math.round(seconds % 60);
+      return `${m}:${String(s).padStart(2, "0")}`;
+    }
+
+    function formatKm(value) {
+      return Number(value || 0).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    }
+
+    function formatTime(seconds) {
+      const h = Math.floor((seconds || 0) / 3600);
+      const m = Math.floor(((seconds || 0) % 3600) / 60);
+      return `${h}h${String(m).padStart(2, "0")}`;
+    }
+
+    function weekItems() {
+      const now = new Date();
+      const start = new Date(now);
+      start.setHours(0, 0, 0, 0);
+      start.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+      const end = new Date(start);
+      end.setDate(start.getDate() + 7);
+      return workouts.filter(w => {
+        const d = new Date(w.date + "T12:00:00");
+        return d >= start && d < end;
+      });
+    }
+
+    function render() {
+      const week = weekItems();
+      const kmTotal = week.reduce((sum, w) => sum + w.totalDistance, 0);
+      const secTotal = week.reduce((sum, w) => sum + w.seconds, 0);
+      const hrAvg = week.length ? Math.round(week.reduce((sum, w) => sum + w.hr, 0) / week.length) : 0;
+      $("weekCount").textContent = week.length;
+      $("weekKm").textContent = formatKm(kmTotal);
+      $("weekTime").textContent = formatTime(secTotal);
+      $("analysisKm").textContent = `${formatKm(kmTotal)} km`;
+      $("analysisPace").textContent = kmTotal ? secondsToPace(secTotal / kmTotal) : "--:--";
+      $("analysisHr").textContent = hrAvg ? `${hrAvg} bpm` : "--";
+      renderHistory();
+      drawChart(week);
+    }
+
+    function renderHistory() {
+      $("history").innerHTML = workouts.length ? "" : "<p class='small'>Nenhum treino salvo ainda.</p>";
+      workouts.forEach(w => {
+        const item = document.createElement("div");
+        item.className = "workout";
+        item.innerHTML = `
+          <div class="workout-head"><strong>${w.type}</strong><span class="small">${new Date(w.date + "T12:00:00").toLocaleDateString("pt-BR")}</span></div>
+          <div class="tags"><span>${formatKm(w.totalDistance)} km</span><span>${w.avgPace}/km</span><span>${w.hr} bpm</span><span>${formatTime(w.seconds)}</span></div>
+          <div>${w.notes || "Sem observações."}</div>
+          <button class="danger">Excluir</button>
+        `;
+        item.querySelector("button").onclick = async () => {
+          workouts = workouts.filter(x => x.id !== w.id);
+          saveLocal();
+          await syncGithub();
+          render();
+        };
+        $("history").appendChild(item);
+      });
+    }
+
+    function drawChart(items) {
+      const canvas = $("chart");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const days = ["S", "T", "Q", "Q", "S", "S", "D"];
+      const values = Array(7).fill(0);
+      items.forEach(w => values[(new Date(w.date + "T12:00:00").getDay() + 6) % 7] += w.totalDistance);
+      const max = Math.max(5, ...values);
+      ctx.font = "16px system-ui";
+      values.forEach((v, i) => {
+        const x = 34 + i * 92;
+        const h = (v / max) * 200;
+        const y = 240 - h;
+        const grad = ctx.createLinearGradient(0, y, 0, 240);
+        grad.addColorStop(0, "#ff304f");
+        grad.addColorStop(1, "#7b1430");
+        ctx.fillStyle = grad;
+        ctx.fillRect(x, y, 46, h);
+        ctx.fillStyle = "#dfe1e7";
+        ctx.fillText(days[i], x + 16, 274);
+        if (v) ctx.fillText(formatKm(v), x + 5, y - 8);
+      });
+    }
+
+    function githubReady() {
+      return github.ghOwner && github.ghRepo && github.ghBranch && github.ghPath && github.ghToken;
+    }
+
+    async function syncGithub() {
+      if (!githubReady()) {
+        $("syncStatus").textContent = "Salvamento local ativo.";
+        return;
+      }
+      try {
+        $("syncStatus").textContent = "Sincronizando...";
+        const path = encodeURIComponent(github.ghPath).replaceAll("%2F", "/");
+        const base = `https://api.github.com/repos/${github.ghOwner}/${github.ghRepo}/contents/${path}`;
+        const headers = {
+          "Accept": "application/vnd.github+json",
+          "Authorization": `Bearer ${github.ghToken}`,
+          "X-GitHub-Api-Version": "2022-11-28"
+        };
+        const current = await fetch(`${base}?ref=${github.ghBranch}`, { headers });
+        const old = current.ok ? await current.json() : null;
+        if (old && old.content) {
+          const remote = JSON.parse(decodeURIComponent(escape(atob(old.content.replace(/\n/g, "")))));
+          if (Array.isArray(remote.workouts)) {
+            mergeWorkouts(remote.workouts);
+            saveLocal();
+            render();
+          }
+        }
+        const body = {
+          message: "Atualiza treinos SUB3h RUN",
+          branch: github.ghBranch,
+          content: btoa(unescape(encodeURIComponent(JSON.stringify({ workouts }, null, 2))))
+        };
+        if (old && old.sha) body.sha = old.sha;
+        const saved = await fetch(base, { method: "PUT", headers, body: JSON.stringify(body) });
+        if (!saved.ok) throw new Error("Falha ao salvar");
+        $("syncStatus").textContent = "Sincronizado com GitHub.";
+      } catch {
+        $("syncStatus").textContent = "Não foi possível sincronizar agora. Seus dados continuam salvos no celular.";
+      }
+    }
+
+    function mergeWorkouts(remote) {
+      const map = new Map();
+      [...remote, ...workouts].forEach(w => map.set(w.id, w));
+      workouts = [...map.values()].sort((a, b) => b.date.localeCompare(a.date));
+    }
+
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+    render();
+    syncGithub();
+  </script>
+</body>
+</html>
